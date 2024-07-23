@@ -15,7 +15,7 @@ struct ContentView: View {
   
   @FocusState private var amountIsFocused: Bool
   
-  let tipPercentages = [5, 10, 15, 20, 25]
+  let tipPercentages = Array(1...100)
   var totalPerPerson: Double {
     let peopleCount = Double(numberOfPeople + 2)
     let tipSelection = Double(tipPercentage)
@@ -47,7 +47,7 @@ struct ContentView: View {
                 Text($0, format: .percent)
               }
             }
-            .pickerStyle(.segmented)
+            .pickerStyle(.navigationLink)
             
             Button("Não deixar gorjeta") {
               withAnimation {
@@ -55,6 +55,10 @@ struct ContentView: View {
                 tipPercentage = 0
               }
             }
+            }
+          
+          Section("Total com a gorjeta") {
+            Text((totalPerPerson * Double(numberOfPeople + 2)), format: .currency(code: Locale.current.currency?.identifier ?? "brl"))
           }
           
         } else {
@@ -67,9 +71,14 @@ struct ContentView: View {
         }
         
         
-        Section {
-          Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "brl"))
+        
+        Section("Quantidade por pessoa") {
+          withAnimation {
+            Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "brl"))
+          }
         }
+        
+        
       }
       .navigationTitle("Divide Aí")
       .toolbar {
